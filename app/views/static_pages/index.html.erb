@@ -11,7 +11,7 @@
    <li>
       <div class="view"><input class="toggle" type="checkbox"><label>Make bed</label></div>
    </li>
-   li>
+   <li>
       <div class="view"><input class="toggle" type="checkbox"><label>Get haircut</label></div>
    </li>
 
@@ -28,6 +28,7 @@
       $.each(data, function(index,  task) {
         var checkedStatus = task.done ? "checked" : "";
         var liElement = '<li><div class="view"><input class="toggle" type="checkbox"' +
+        " data-id='" + task.id + "'" +
         checkedStatus +
         '><label>' +
          task.title +
@@ -36,6 +37,21 @@
       });
       var ulTodos = $('.todo-list');
       ulTodos.html(htmlString);
+
+    $('.toggle').change(function(e) {
+        var itemId = $(e.target).data("id");
+        console.log(itemId);
+
+        var doneValue = Boolean($(e.target).is(' :checked'));
+        console.log("done:", doneValue);
+
+        $.post("/tasks/" + itemId, {
+          _method: "PUT",
+          task: {
+            done: doneValue
+          }
+          });
+      });
     });
   });
 </script>
